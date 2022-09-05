@@ -1,4 +1,5 @@
 import { lazy } from 'react';
+import { Navigate } from 'react-router';
 
 // project imports
 import MainLayout from 'layout/MainLayout';
@@ -15,7 +16,7 @@ const UtilsMaterialIcons = Loadable(lazy(() => import('views/utilities/MaterialI
 const UtilsTablerIcons = Loadable(lazy(() => import('views/utilities/TablerIcons')));
 
 // sample page routing
-const SamplePage = Loadable(lazy(() => import('views/sample-page')));
+const FinancPage = Loadable(lazy(() => import('views/finance')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -25,13 +26,13 @@ const MainRoutes = {
     children: [
         {
             path: '/',
-            element: <DashboardDefault />
+            element: <Navigate to="/dashboard" />
         },
         {
-            path: 'dashboard',
+            path: '/',
             children: [
                 {
-                    path: 'default',
+                    path: 'dashboard',
                     element: <DashboardDefault />
                 }
             ]
@@ -82,8 +83,8 @@ const MainRoutes = {
             ]
         },
         {
-            path: 'sample-page',
-            element: <SamplePage />
+            path: 'finance',
+            element: <FinancPage />
         }
     ]
 };
