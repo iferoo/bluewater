@@ -1,8 +1,8 @@
 {
-    "name": "berry-material-react-free",
+    "name": "bluewater",
     "version": "3.2.0",
     "private": true,
-    "homepage": "https://berrydashboard.io/free",
+    "homepage": "https://www.bluewater-safaris.com/",
     "dependencies": {
         "@emotion/cache": "^11.9.3",
         "@emotion/react": "^11.9.3",
