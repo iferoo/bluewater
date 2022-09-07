@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 // material-ui
-import { Typography } from '@mui/material';
+// import { Typography } from '@mui/material';
 import MaterialTable from 'material-table';
 
 // project imports
@@ -47,131 +47,117 @@ export default function SamplePage() {
         ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
         ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
     };
-
-    const [tableData, setTableData] = useState([
-        { name: 'Raj', email: 'Raj@gmail.com', phone: 7894561230, age: null, gender: 'M', city: 'Chennai', fee: 78456 },
-        { name: 'Mohan', email: 'mohan@gmail.com', phone: 7845621590, age: 35, gender: 'M', city: 'Delhi', fee: 456125 },
-        { name: 'Sweety', email: 'sweety@gmail.com', phone: 741852912, age: 17, gender: 'F', city: 'Noida', fee: 458796 },
-        { name: 'Vikas', email: 'vikas@gmail.com', phone: 9876543210, age: 20, gender: 'M', city: 'Mumbai', fee: 874569 },
-        { name: 'Neha', email: 'neha@gmail.com', phone: 7845621301, age: 25, gender: 'F', city: 'Patna', fee: 748521 },
-        { name: 'Mohan', email: 'mohan@gmail.com', phone: 7845621590, age: 35, gender: 'M', city: 'Delhi', fee: 456125 },
-        { name: 'Sweety', email: 'sweety@gmail.com', phone: 741852912, age: 17, gender: 'F', city: 'Noida', fee: 458796 },
-        { name: 'Vikas', email: 'vikas@gmail.com', phone: 9876543210, age: 20, gender: 'M', city: 'Mumbai', fee: 874569 },
-        { name: 'Raj', email: 'Raj@gmail.com', phone: 7894561230, age: null, gender: 'M', city: 'Chennai', fee: 78456 },
-        { name: 'Mohan', email: 'mohan@gmail.com', phone: 7845621590, age: 35, gender: 'M', city: 'Delhi', fee: 456125 },
-        { name: 'Sweety', email: 'sweety@gmail.com', phone: 741852912, age: 17, gender: 'F', city: 'Noida', fee: 458796 },
-        { name: 'Vikas', email: 'vikas@gmail.com', phone: 9876543210, age: 20, gender: 'M', city: 'Mumbai', fee: 874569 }
-    ]);
-    const columns = [
+    const [columns, setColumns] = useState([
+        { title: 'Statement', field: 'statement' },
+        { title: 'Total', field: 'total', type: 'numeric' },
+        { title: 'Date', field: 'date' },
+        { title: 'Payment', field: 'payment' },
+        { title: 'Payment Date', field: 'paymentDate' },
+        { title: 'The Rest', field: 'theRest' },
         {
-            title: 'Name',
-            field: 'name',
-            sorting: false,
-            filtering: false,
-            cellStyle: { background: '#009688' },
-            headerStyle: { color: '#fff' }
-        },
-        { title: 'Email', field: 'email', filterPlaceholder: 'filter' },
-        { title: 'Phone Number', field: 'phone', align: 'center', grouping: false },
-        {
-            title: 'Age',
-            field: 'age',
-            emptyValue: () => <em>null</em>,
+            title: 'State',
+            field: 'state',
+            lookup: { deferred: 'Deferred', paid: 'Paid' },
             render: (rowData) => (
-                <div style={{ background: rowData.age >= 18 ? '#008000aa' : '#f90000aa', borderRadius: '4px', paddingLeft: 5 }}>
-                    {rowData.age >= 18 ? '18+' : '18-'}
+                <div
+                    style={{
+                        background: rowData.state == 'paid' ? '#008000aa' : '#f90000aa',
+                        borderRadius: '4px',
+                        textAlign: 'center',
+                        color: '#ffffff'
+                    }}
+                >
+                    {rowData.state}
                 </div>
-            ),
-            searchable: false,
-            export: false
+            )
         },
-        { title: 'Gender', field: 'gender', lookup: { M: 'Male', F: 'Female' } },
-        { title: 'City', field: 'city', filterPlaceholder: 'filter' },
         {
-            title: 'School Fee',
-            field: 'fee',
-            type: 'currency',
-            currencySetting: { currencyCode: 'INR', minimumFractionDigits: 1 },
-            cellStyle: { background: '#009688' },
-            headerStyle: { color: '#fff' }
-        }
-    ];
+            title: 'Reciever',
+            field: 'reciever',
+            lookup: { abdelsalam: 'Abd El Salam', ahmed: 'Ahmed', eyad: 'Eyad', alla: 'Alla', annika: 'Annika' }
+        },
+        { title: 'Notes', field: 'notes' }
+    ]);
 
+    const [data, setData] = useState([
+        {
+            statement: 'Marina ind 2',
+            total: 1000,
+            date: '10/9/2022',
+            payment: 1987,
+            paymentDate: '11/8/2022',
+            theRest: 500,
+            state: 'deferred',
+            reciever: 'abdelsalam',
+            notes: ''
+        },
+        {
+            statement: 'Oxegen Tank',
+            total: 500,
+            date: '5/9/2022',
+            payment: 1987,
+            paymentDate: '5/9/2022',
+            theRest: 200,
+            state: 'paid',
+            reciever: 'eyad',
+            notes: ''
+        }
+    ]);
     return (
         <MainCard>
             <MaterialTable
+                title="Payments"
+                icons={tableIcons}
                 columns={columns}
-                data={tableData}
+                data={data}
                 editable={{
-                    onRowAdd: (newRow) =>
+                    onRowAdd: (newData) =>
                         new Promise((resolve, reject) => {
-                            setTableData([...tableData, newRow]);
-
-                            setTimeout(() => resolve(), 500);
+                            setTimeout(() => {
+                                setData([...data, newData]);
+                                resolve();
+                            }, 1000);
                         }),
-                    onRowUpdate: (newRow, oldRow) =>
+                    onRowUpdate: (newData, oldData) =>
                         new Promise((resolve, reject) => {
-                            const updatedData = [...tableData];
-                            updatedData[oldRow.tableData.id] = newRow;
-                            setTableData(updatedData);
-                            setTimeout(() => resolve(), 500);
+                            setTimeout(() => {
+                                const dataUpdate = [...data];
+                                const index = oldData.tableData.id;
+                                dataUpdate[index] = newData;
+                                setData([...dataUpdate]);
+                                resolve();
+                            }, 1000);
                         }),
-                    onRowDelete: (selectedRow) =>
+                    onRowDelete: (oldData) =>
                         new Promise((resolve, reject) => {
-                            const updatedData = [...tableData];
-                            updatedData.splice(selectedRow.tableData.id, 1);
-                            setTableData(updatedData);
-                            setTimeout(() => resolve(), 1000);
+                            setTimeout(() => {
+                                const dataDelete = [...data];
+                                const index = oldData.tableData.id;
+                                dataDelete.splice(index, 1);
+                                setData([...dataDelete]);
+                                resolve();
+                            }, 1000);
                         })
                 }}
-                actions={[
-                    {
-                        // icon: () => <GetAppIcon />,
-                        tooltip: 'Click me',
-                        onClick: (e, data) => console.log(data)
-                        // isFreeAction:true
-                    }
-                ]}
-                onSelectionChange={(selectedRows) => console.log(selectedRows)}
                 options={{
                     sorting: true,
                     search: true,
-                    searchFieldAlignment: 'right',
+                    searchFieldAlignment: 'left',
                     searchAutoFocus: true,
                     searchFieldVariant: 'standard',
-                    filtering: true,
                     paging: true,
                     pageSizeOptions: [2, 5, 10, 20, 25, 50, 100],
                     pageSize: 5,
                     paginationType: 'stepped',
-                    showFirstLastPageButtons: false,
-                    paginationPosition: 'both',
+                    showFirstLastPageButtons: true,
                     exportButton: true,
                     exportAllData: true,
-                    exportFileName: 'TableData',
+                    exportFileName: 'blue water aza2',
                     addRowPosition: 'first',
                     actionsColumnIndex: -1,
-                    selection: true,
-                    showSelectAllCheckbox: false,
-                    showTextRowsSelected: false,
-                    selectionProps: (rowData) => ({
-                        disabled: rowData.age == null
-                        // color:"primary"
-                    }),
-                    grouping: true,
-                    columnsButton: true,
-                    rowStyle: (data, index) => (index % 2 === 0 ? { background: '#f5f5f5' } : null),
-                    headerStyle: { background: '#f44336', color: '#fff' }
+                    columnsButton: true
                 }}
-                title="Student Information"
-                icons={tableIcons}
             />
-            {/* <Typography variant="body2">
-            Lorem ipsum dolor sit amen, consenter nipissing eli, sed do elusion tempos incident ut laborers et doolie magna alissa. Ut enif
-            ad minim venice, quin nostrum exercitation illampu laborings nisi ut liquid ex ea commons construal. Duos aube grue dolor in
-            reprehended in voltage veil esse colum doolie eu fujian bulla parian. Exceptive sin ocean cuspidate non president, sunk in culpa
-            qui officiate descent molls anim id est labours.
-        </Typography> */}
         </MainCard>
     );
 }

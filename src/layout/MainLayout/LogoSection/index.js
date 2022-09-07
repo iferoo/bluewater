@@ -16,7 +16,7 @@ export default function LogoSection() {
     return (
         <ButtonBase disableRipple /*component={Link} to={config.defaultPath}*/>
             {/* <Logo /> */}
-            <h1 style={{ color: theme.palette.primary.dark }}>BLUE WATER</h1>
+            <h3 style={{ color: theme.palette.primary.dark }}>BLUEWATER-SAFARIS</h3>
         </ButtonBase>
     );
 }
