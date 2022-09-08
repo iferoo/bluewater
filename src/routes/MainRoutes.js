@@ -16,7 +16,8 @@ const UtilsMaterialIcons = Loadable(lazy(() => import('views/utilities/MaterialI
 const UtilsTablerIcons = Loadable(lazy(() => import('views/utilities/TablerIcons')));
 
 // sample page routing
-const FinancPage = Loadable(lazy(() => import('views/finance')));
+const Financ = Loadable(lazy(() => import('views/finance')));
+const Calender = Loadable(lazy(() => import('views/calender')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -84,7 +85,11 @@ const MainRoutes = {
         },
         {
             path: 'finance',
-            element: <FinancPage />
+            element: <Financ />
+        },
+        {
+            path: 'calender',
+            element: <Calender />
         }
     ]
 };

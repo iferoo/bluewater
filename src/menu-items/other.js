@@ -1,15 +1,24 @@
 // assets
-import { IconCurrencyEuro, IconHelp } from '@tabler/icons';
+import { IconCurrencyEuro, IconHelp, IconCalendar } from '@tabler/icons';
 
 // constant
-const icons = { IconCurrencyEuro, IconHelp };
+const icons = { IconCurrencyEuro, IconHelp, IconCalendar };
 
 // ==============================|| SAMPLE PAGE & DOCUMENTATION MENU ITEMS ||============================== //
 
 const other = {
     id: 'sample-docs-roadmap',
     type: 'group',
+    title: 'Features',
     children: [
+        {
+            id: 'calender',
+            title: 'Calender',
+            type: 'item',
+            url: '/calender',
+            icon: icons.IconCalendar,
+            breadcrumbs: false
+        },
         {
             id: 'finance',
             title: 'Finance',
@@ -18,6 +27,7 @@ const other = {
             icon: icons.IconCurrencyEuro,
             breadcrumbs: false
         }
+
         // {
         //     id: 'documentation',
         //     title: 'Documentation',

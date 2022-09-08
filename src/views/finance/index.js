@@ -27,7 +27,7 @@ import ViewColumn from '@material-ui/icons/ViewColumn';
 
 // ==============================|| SAMPLE PAGE ||============================== //
 
-export default function SamplePage() {
+export default function Finance() {
     const tableIcons = {
         Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
         Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
