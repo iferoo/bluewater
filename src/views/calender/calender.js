@@ -7,6 +7,8 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import events from './event';
 import { useCallback } from 'react';
 import { useState } from 'react';
+import CalenderDialog from './calenderDialog';
+import { useEffect } from 'react';
 
 const ColoredDateCellWrapper = ({ children }) =>
     React.cloneElement(React.Children.only(children), {
@@ -29,19 +31,31 @@ export default function Calender() {
         []
     );
     const [myEvents, setEvents] = useState(events);
+
+    const [openDialog, setOpenDialog] = useState(false);
+    const [start, setStart] = useState(null);
+    const [end, setEnd] = useState(null);
+
     const handleSelectSlot = useCallback(
         ({ start, end }) => {
-            const title = window.prompt('New Event Name');
-            if (title) {
-                setEvents((prev) => [...prev, { start, end, title }]);
-            }
+            setStart(start);
+            setEnd(end);
+            setOpenDialog(true);
         },
         [setEvents]
     );
 
-    const handleSelectEvent = useCallback((event) => window.alert(event.title), []);
+    const handleSelectEvent = useCallback((event) => window.alert(event.start), []);
     return (
         <Fragment>
+            <CalenderDialog
+                openDialog={openDialog}
+                setOpenDialog={setOpenDialog}
+                start={start}
+                end={end}
+                events={myEvents}
+                setEvents={setEvents}
+            />
             <Calendar
                 dayLayoutAlgorithm="no-overlap"
                 defaultDate={defaultDate}
