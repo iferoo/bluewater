@@ -47,7 +47,7 @@ export default function Finance() {
         ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
         ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
     };
-    const [columns, setColumns] = useState([
+    const columns = [
         { title: 'Statement', field: 'statement' },
         { title: 'Total', field: 'total', type: 'numeric' },
         { title: 'Date', field: 'date' },
@@ -77,7 +77,7 @@ export default function Finance() {
             lookup: { abdelsalam: 'Abd El Salam', ahmed: 'Ahmed', eyad: 'Eyad', alla: 'Alla', annika: 'Annika' }
         },
         { title: 'Notes', field: 'notes' }
-    ]);
+    ];
 
     const [data, setData] = useState([
         {
@@ -112,14 +112,14 @@ export default function Finance() {
                 data={data}
                 editable={{
                     onRowAdd: (newData) =>
-                        new Promise((resolve, reject) => {
+                        new Promise((resolve /*, reject*/) => {
                             setTimeout(() => {
                                 setData([...data, newData]);
                                 resolve();
                             }, 1000);
                         }),
                     onRowUpdate: (newData, oldData) =>
-                        new Promise((resolve, reject) => {
+                        new Promise((resolve /*, reject*/) => {
                             setTimeout(() => {
                                 const dataUpdate = [...data];
                                 const index = oldData.tableData.id;
@@ -129,7 +129,7 @@ export default function Finance() {
                             }, 1000);
                         }),
                     onRowDelete: (oldData) =>
-                        new Promise((resolve, reject) => {
+                        new Promise((resolve /*, reject*/) => {
                             setTimeout(() => {
                                 const dataDelete = [...data];
                                 const index = oldData.tableData.id;
