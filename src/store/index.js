@@ -1,9 +1,14 @@
-import { createStore } from 'redux';
-import reducer from './reducer';
+import { configureStore } from '@reduxjs/toolkit';
+import customization from './customizationSlice';
 
-// ==============================|| REDUX - MAIN STORE ||============================== //
-
-const store = createStore(reducer);
 const persister = 'Free';
+// ==============================|| REDUX - MAIN STORE ||============================== //
+const store = configureStore({
+    reducer: {
+        customization
+    }
+});
 
-export { store, persister };
+export default store;
+
+export { persister };
