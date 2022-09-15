@@ -20,6 +20,7 @@
         "apexcharts": "^3.35.3",
         "formik": "^2.2.9",
         "framer-motion": "^6.3.16",
+        "json-server": "^0.17.0",
         "material-table": "^2.0.3",
         "material-ui-popup-state": "^4.0.1",
         "prop-types": "^15.8.1",
@@ -37,6 +38,7 @@
     },
     "scripts": {
         "start": "GENERATE_SOURCEMAP=false react-scripts start",
+        "server": "json-server --watch db.json --port 3004",
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject"

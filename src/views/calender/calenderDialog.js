@@ -8,18 +8,37 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import { useEffect } from 'react';
 
-export default function CalenderDialog({ id, taskTitle, openDialog, setOpenDialog, start, setStart, end, setEnd, status, handleSubmite }) {
+export default function CalenderDialog({
+    id,
+    taskTitle,
+    openDialog,
+    setOpenDialog,
+    start,
+    setStart,
+    end,
+    setEnd,
+    handleAddEvent,
+    handleUpdateEvent,
+    handleDeleteEvent,
+    status
+}) {
     const theme = useTheme();
 
-    const [title, setTitle] = useState(taskTitle);
+    // handle title
+    const [title, setTitle] = useState('');
 
+    useEffect(() => {
+        setTitle(taskTitle);
+    }, [taskTitle]);
+
+    // handle close dialog
     const handleClose = () => {
         setOpenDialog(false);
+        setTitle('');
     };
 
-    // const date = new Date();
-    // console.log(new Date(start.toISOString().slice(0, 16)), start.toISOString());
     return (
         <div>
             <Dialog
@@ -62,28 +81,51 @@ export default function CalenderDialog({ id, taskTitle, openDialog, setOpenDialo
                     </Stack>
                 </DialogContent>
                 <DialogActions>
-                    <Button
-                        variant="outlined"
-                        color="error"
-                        onClick={() => {
-                            const newStatus = status === 'ADD' ? 'CANCEL' : 'DELETE';
-                            handleSubmite(newStatus, title, start, end, id);
-                            handleClose();
-                            setTitle('');
-                        }}
-                    >
-                        {status === 'ADD' ? 'Cancel' : 'Delete'}
-                    </Button>
-                    <Button
-                        variant="contained"
-                        onClick={() => {
-                            handleSubmite(status, title, start, end, id);
-                            handleClose();
-                            setTitle('');
-                        }}
-                    >
-                        {status === 'ADD' ? 'Add' : 'Update'}
-                    </Button>
+                    {status === 'SELECT_SLOT' ? (
+                        <>
+                            <Button
+                                variant="outlined"
+                                color="error"
+                                onClick={() => {
+                                    handleClose();
+                                }}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                variant="contained"
+                                onClick={() => {
+                                    handleAddEvent(title, start, end);
+                                    handleClose();
+                                }}
+                            >
+                                Add
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                            <Button
+                                variant="outlined"
+                                color="error"
+                                onClick={() => {
+                                    handleDeleteEvent(id, title, start, end);
+                                    handleClose();
+                                    setTitle('');
+                                }}
+                            >
+                                Delete
+                            </Button>
+                            <Button
+                                variant="contained"
+                                onClick={() => {
+                                    handleUpdateEvent(id, title, start, end);
+                                    handleClose();
+                                }}
+                            >
+                                Update
+                            </Button>
+                        </>
+                    )}
                 </DialogActions>
             </Dialog>
         </div>
@@ -97,7 +139,9 @@ CalenderDialog.propTypes = {
     start: PropTypes.instanceOf(Date),
     end: PropTypes.instanceOf(Date),
     status: PropTypes.string,
-    handleSubmite: PropTypes.func,
     setStart: PropTypes.func,
-    setEnd: PropTypes.func
+    setEnd: PropTypes.func,
+    handleAddEvent: PropTypes.func,
+    handleUpdateEvent: PropTypes.func,
+    handleDeleteEvent: PropTypes.func
 };

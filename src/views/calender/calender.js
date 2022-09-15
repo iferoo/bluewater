@@ -1,20 +1,36 @@
-import { Fragment, useState, useCallback } from 'react';
+import { Fragment, useState, useEffect, useCallback } from 'react';
+import PropTypes from 'prop-types';
 
-import moment from 'moment';
+//state mangement
+import { useDispatch } from 'react-redux';
+import { addEvent, deleteEvent, updateEvent } from 'store/calenderSlice';
 
-import { Calendar, Views, momentLocalizer } from 'react-big-calendar';
-
-import CalenderDialog from './calenderDialog';
-
+//react big calender
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-
+import { Calendar, Views, momentLocalizer } from 'react-big-calendar';
+import moment from 'moment';
 const localizer = momentLocalizer(moment);
 
-import events from './event';
+// component
+import CalenderDialog from './calenderDialog';
 
-export default function Calender() {
-    const [myEvents, setEvents] = useState(events);
+export default function Calender({ events }) {
+    const dispatch = useDispatch();
+
+    // handle Events
+    const [myEvents, setEvents] = useState([]);
+
+    useEffect(() => {
+        let newEvents = events.map((event) => {
+            return {
+                ...event,
+                start: new Date(event.start),
+                end: new Date(event.end)
+            };
+        });
+        setEvents(newEvents);
+    }, [events]);
 
     //Handle Dialog Variable
     const [status, setStatus] = useState('ADD');
@@ -24,46 +40,64 @@ export default function Calender() {
     const [end, setEnd] = useState(new Date());
     const [ID, setId] = useState(null);
 
+    // Calender Events
     const handleSelectSlot = ({ start, end }) => {
+        setStatus('SELECT_SLOT');
         setTitle('');
         setStart(start);
         setEnd(end);
-        setStatus('ADD');
         setOpenDialog(true);
     };
 
     const handleSelectEvent = ({ id, title, start, end }) => {
-        setStatus('UPDATE');
+        setStatus('SELECT_EVENT');
+        setId(id);
         setTitle(title);
         setStart(start);
         setEnd(end);
-        setId(id);
         setOpenDialog(true);
     };
-    //Handle Calender Task submit
-    const handleSubmite = useCallback(
-        (status, title, start, end, id) => {
-            let newEvents = null;
-            switch (status) {
-                case 'ADD':
-                    setEvents([...myEvents, { id: Math.random(), start, end, title }]);
-                    break;
-                case 'UPDATE':
-                    const eventIndex = myEvents.findIndex((event) => event.id === id);
-                    newEvents = myEvents;
-                    newEvents.splice(eventIndex, 1, { id, start, end, title });
-                    setEvents(newEvents);
-                    break;
-                case 'DELETE':
-                    newEvents = myEvents.filter((event) => event.id !== id);
-                    setEvents(newEvents);
 
-                    break;
-                default:
-                    break;
-            }
+    //Handle Add Event Calender
+    const handleAddEvent = useCallback(
+        (title, start, end) => {
+            const event = {
+                id: Math.random(),
+                title,
+                start: start.toISOString(),
+                end: end.toISOString()
+            };
+            dispatch(addEvent(event));
         },
-        [myEvents]
+        [dispatch]
+    );
+
+    //Handle Update Event Calender
+    const handleUpdateEvent = useCallback(
+        (id, title, start, end) => {
+            const event = {
+                id,
+                title,
+                start: start.toISOString(),
+                end: end.toISOString()
+            };
+            dispatch(updateEvent(event));
+        },
+        [dispatch]
+    );
+
+    //Handle Delete Event Calender
+    const handleDeleteEvent = useCallback(
+        (id, title, start, end) => {
+            const event = {
+                id,
+                title,
+                start: start.toISOString(),
+                end: end.toISOString()
+            };
+            dispatch(deleteEvent(event));
+        },
+        [dispatch]
     );
 
     return (
@@ -77,8 +111,10 @@ export default function Calender() {
                 setStart={setStart}
                 end={end}
                 setEnd={setEnd}
+                handleAddEvent={handleAddEvent}
+                handleUpdateEvent={handleUpdateEvent}
+                handleDeleteEvent={handleDeleteEvent}
                 status={status}
-                handleSubmite={handleSubmite}
             />
             <Calendar
                 dayLayoutAlgorithm="no-overlap"
@@ -96,3 +132,7 @@ export default function Calender() {
         </Fragment>
     );
 }
+
+Calender.propTypes = {
+    events: PropTypes.array
+};
